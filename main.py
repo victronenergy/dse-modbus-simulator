@@ -5,6 +5,7 @@ import time
 import random
 import argparse
 import logging
+from enum import IntEnum
 from threading import Thread
 from numbers import Number
 from pyModbusTCP.server import ModbusServer, DataHandler
@@ -143,20 +144,15 @@ class DSEEngine(Thread):
         self.simulator.set_register('/Engine/Speed', 0)
         self.simulator.set_register('/StarterVoltage', 12.8 + random.uniform(-0.2, 0.2))
 
+class DSEAlarmVals(IntEnum):
+    NOT_ACTIVE = 1
+    WARNING = 2
+    SHUTDOWN = 3
+    ELECTRICAL_TRIP = 4
+    UNIMPLEMENTED = 15
+
 class DSESimulator:
 
-    """ Alerts value: 
-        0      Disabled digital input
-        1      Not active alarm
-        2      Warning alarm
-        3      Shutdown alarm
-        4      Electrical trip alarm
-        5-7    Reserved
-        8      Inactive indication (no string)
-        9      Inactive indication (displayed string)
-        10     Active indication
-        11-14  Reserved
-        15     Unimplemented alarm """
     alarm_base = 2048
     alarm_count = 26
 
@@ -165,6 +161,25 @@ class DSESimulator:
         35732: 'TELEMETRY_START',
         35733: 'TELEMETRY_STOP'
     }
+
+    alarm_vals = [
+        'Disabled digital input',
+        'Not active alarm',
+        'Warning alarm',
+        'Shutdown alarm',
+        'Electrical trip alarm',
+        'Reserved',
+        'Reserved',
+        'Reserved',
+        'Inactive indication (no string)',
+        'Inactive indication (displayed string)',
+        'Active indication',
+        'Reserved',
+        'Reserved',
+        'Reserved',
+        'Reserved',
+        'Unimplemented alarm',
+    ]
 
     def __init__(self, host: str, port: int, registers: dict, alarms: dict):
 
@@ -228,7 +243,7 @@ class DSESimulator:
             tmp.append(alarm['val'])
             if len(tmp) == 4:
                 # Convert tmp array into one number
-                alarm_vals.append(tmp[3] << 12 | tmp[1] << 8 | tmp[2] << 4 | tmp[3])
+                alarm_vals.append(tmp[0] << 12 | tmp[1] << 8 | tmp[2] << 4 | tmp[3])
                 tmp = []
         self.server.data_bank.set_holding_registers(self.alarm_base, alarm_vals)
 
@@ -267,6 +282,16 @@ class DSESimulator:
     def add_to_register(self, path: str, value: float):
         self.registers[path]['val'] += value
 
+    def set_alarm(self, alarm_id, value):
+        value = int(value)
+        if value not in range(len(self.alarm_vals)):
+            return
+
+        for k in self.alarms:
+            if k['id'] == alarm_id:
+                k['val'] = value
+                logging.info(f"Set alarm '{ k['desc'] }' to '{ self.alarm_vals[value] }'")
+
 
 if __name__ == '__main__':
 
@@ -297,5 +322,10 @@ if __name__ == '__main__':
     )
     
     simulator.set_register('/AutoStart', 1)
+
+    simulator.set_alarm(4096, DSEAlarmVals.SHUTDOWN)            # Emergency stop
+    simulator.set_alarm(4097, DSEAlarmVals.WARNING)             # Low oil pressure
+    simulator.set_alarm(4117, DSEAlarmVals.ELECTRICAL_TRIP)     # Magnetic pickup fault
+
     simulator.start()
 
