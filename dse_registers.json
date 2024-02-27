@@ -1,0 +1,163 @@
+{
+    "/StatusCode": {
+        "reg": 1408,
+        "type": "u16",
+        "scale": 1,
+        "unit": "",
+        "val": 0
+    },
+    "/AutoStart": {
+        "reg": 772,
+        "type": "u16",
+        "scale": 1,
+        "unit": "",
+        "val": 0
+    },
+    "/Ac/Power": {
+        "reg": 1536,
+        "type": "s32",
+        "scale": 1,
+        "unit": "W",
+        "val": 0
+    },
+    "/Ac/L1/Power": {
+        "reg": 1052,
+        "type": "s32",
+        "scale": 1,
+        "unit": "W",
+        "val": 0
+    },
+    "/Ac/L2/Power": {
+        "reg": 1054,
+        "type": "s32",
+        "scale": 1,
+        "unit": "W",
+        "val": 0
+    },
+    "/Ac/L3/Power": {
+        "reg": 1056,
+        "type": "s32",
+        "scale": 1,
+        "unit": "W",
+        "val": 0
+    },
+    "/Ac/L1/Voltage": {
+        "reg": 1032,
+        "type": "u32",
+        "scale": 10,
+        "unit": "V",
+        "val": 0
+    },
+    "/Ac/L2/Voltage": {
+        "reg": 1034,
+        "type": "u32",
+        "scale": 10,
+        "unit": "V",
+        "val": 0
+    },
+    "/Ac/L3/Voltage": {
+        "reg": 1036,
+        "type": "u32",
+        "scale": 10,
+        "unit": "V",
+        "val": 0
+    },
+    "/Ac/L1/Current": {
+        "reg": 1044,
+        "type": "u32",
+        "scale": 10,
+        "unit": "A",
+        "val": 0
+    },
+    "/Ac/L2/Current": {
+        "reg": 1046,
+        "type": "u32",
+        "scale": 10,
+        "unit": "A",
+        "val": 0
+    },
+    "/Ac/L3/Current": {
+        "reg": 1048,
+        "type": "u32",
+        "scale": 10,
+        "unit": "A",
+        "val": 0
+    },
+    "/Ac/Energy/Forward": {
+        "reg": 1800,
+        "type": "u32",
+        "scale": 10,
+        "unit": "kWh",
+        "val": 0
+    },
+    "/Ac/Frequency": {
+        "reg": 1031,
+        "type": "u16",
+        "scale": 10,
+        "unit": "Hz",
+        "val": 0
+    },
+    "/Engine/Speed": {
+        "reg": 1030,
+        "type": "u16",
+        "scale": 1,
+        "unit": "RPM",
+        "val": 0
+    },
+    "/Engine/CoolantTemperature": {
+        "reg": 1025,
+        "type": "s16",
+        "scale": 1,
+        "unit": "\u00b0C",
+        "val": 14.2
+    },
+    "/Engine/OilPressure": {
+        "reg": 1024,
+        "type": "u16",
+        "scale": 1,
+        "unit": "kPa",
+        "val": 0.1
+    },
+    "/Engine/OilTemperature": {
+        "reg": 1026,
+        "type": "s16",
+        "scale": 1,
+        "unit": "\u00b0C",
+        "val": 14.1
+    },
+    "/Engine/Load": {
+        "reg": 1558,
+        "type": "s16",
+        "scale": 10,
+        "unit": "%",
+        "val": null
+    },
+    "/Engine/OperatingHours": {
+        "reg": 1798,
+        "type": "u32",
+        "scale": 1,
+        "unit": "s",
+        "val": 309600
+    },
+    "/Engine/Starts": {
+        "reg": 1808,
+        "type": "u32",
+        "scale": 1,
+        "unit": "",
+        "val": 256
+    },
+    "/StarterVoltage": {
+        "reg": 1029,
+        "type": "u16",
+        "scale": 10,
+        "unit": "V",
+        "val": 13.2
+    },
+    "/TankLevel": {
+        "reg": 1027,
+        "type": "u16",
+        "scale": 1,
+        "unit": "%",
+        "val": 27
+    }
+}

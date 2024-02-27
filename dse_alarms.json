@@ -1,0 +1,497 @@
+[
+    {
+        "desc": "Emergency stop",
+        "id": 4096,
+        "val": 1
+    },
+    {
+        "desc": "Low oil pressure",
+        "id": 4097,
+        "val": 1
+    },
+    {
+        "desc": "High coolant temperature",
+        "id": 4098,
+        "val": 1
+    },
+    {
+        "desc": "High oil temperature",
+        "id": 4099,
+        "val": 1
+    },
+    {
+        "desc": "Under speed",
+        "id": 4100,
+        "val": 1
+    },
+    {
+        "desc": "Over speed",
+        "id": 4101,
+        "val": 1
+    },
+    {
+        "desc": "Fail to start",
+        "id": 4102,
+        "val": 1
+    },
+    {
+        "desc": "Fail to come to rest",
+        "id": 4103,
+        "val": 1
+    },
+    {
+        "desc": "Loss of speed sensing",
+        "id": 4104,
+        "val": 1
+    },
+    {
+        "desc": "Generator low voltage",
+        "id": 4105,
+        "val": 1
+    },
+    {
+        "desc": "Generator high voltage",
+        "id": 4106,
+        "val": 1
+    },
+    {
+        "desc": "Generator low frequency",
+        "id": 4107,
+        "val": 1
+    },
+    {
+        "desc": "Generator high frequency",
+        "id": 4108,
+        "val": 1
+    },
+    {
+        "desc": "Generator high current",
+        "id": 4109,
+        "val": 1
+    },
+    {
+        "desc": "Generator earth fault",
+        "id": 4110,
+        "val": 1
+    },
+    {
+        "desc": "Generator reverse power",
+        "id": 4111,
+        "val": 1
+    },
+    {
+        "desc": "Air flap",
+        "id": 4112,
+        "val": 1
+    },
+    {
+        "desc": "Oil pressure sender fault",
+        "id": 4113,
+        "val": 1
+    },
+    {
+        "desc": "Coolant temperature sender fault",
+        "id": 4114,
+        "val": 1
+    },
+    {
+        "desc": "Oil temperature sender fault",
+        "id": 4115,
+        "val": 1
+    },
+    {
+        "desc": "Fuel level sender fault",
+        "id": 4116,
+        "val": 1
+    },
+    {
+        "desc": "Magnetic pickup fault",
+        "id": 4117,
+        "val": 1
+    },
+    {
+        "desc": "Loss of AC speed signal",
+        "id": 4118,
+        "val": 1
+    },
+    {
+        "desc": "Charge alternator failure",
+        "id": 4119,
+        "val": 1
+    },
+    {
+        "desc": "Low battery voltage",
+        "id": 4120,
+        "val": 1
+    },
+    {
+        "desc": "High battery voltage",
+        "id": 4121,
+        "val": 1
+    },
+    {
+        "desc": "Low fuel level",
+        "id": 4122,
+        "val": 1
+    },
+    {
+        "desc": "High fuel level",
+        "id": 4123,
+        "val": 1
+    },
+    {
+        "desc": "Generator failed to close",
+        "id": 4124,
+        "val": 1
+    },
+    {
+        "desc": "Mains failed to close",
+        "id": 4125,
+        "val": 1
+    },
+    {
+        "desc": "Generator failed to open",
+        "id": 4126,
+        "val": 1
+    },
+    {
+        "desc": "Mains failed to open",
+        "id": 4127,
+        "val": 1
+    },
+    {
+        "desc": "Mains low voltage",
+        "id": 4128,
+        "val": 1
+    },
+    {
+        "desc": "Mains high voltage",
+        "id": 4129,
+        "val": 1
+    },
+    {
+        "desc": "Bus failed to close",
+        "id": 4130,
+        "val": 1
+    },
+    {
+        "desc": "Bus failed to open",
+        "id": 4131,
+        "val": 1
+    },
+    {
+        "desc": "Mains low frequency",
+        "id": 4132,
+        "val": 1
+    },
+    {
+        "desc": "Mains high frequency",
+        "id": 4133,
+        "val": 1
+    },
+    {
+        "desc": "Mains failed",
+        "id": 4134,
+        "val": 1
+    },
+    {
+        "desc": "Mains phase rotation wrong",
+        "id": 4135,
+        "val": 1
+    },
+    {
+        "desc": "Generator phase rotation wrong",
+        "id": 4136,
+        "val": 1
+    },
+    {
+        "desc": "Maintenance due",
+        "id": 4137,
+        "val": 1
+    },
+    {
+        "desc": "Clock not set",
+        "id": 4138,
+        "val": 1
+    },
+    {
+        "desc": "Local LCD configuration lost",
+        "id": 4139,
+        "val": 1
+    },
+    {
+        "desc": "Local telemetry configuration lost",
+        "id": 4140,
+        "val": 1
+    },
+    {
+        "desc": "Control unit not calibrated",
+        "id": 4141,
+        "val": 1
+    },
+    {
+        "desc": "Modem power fault",
+        "id": 4142,
+        "val": 1
+    },
+    {
+        "desc": "Generator short circuit",
+        "id": 4143,
+        "val": 1
+    },
+    {
+        "desc": "Failure to synchronise",
+        "id": 4144,
+        "val": 1
+    },
+    {
+        "desc": "Bus live",
+        "id": 4145,
+        "val": 1
+    },
+    {
+        "desc": "Scheduled run",
+        "id": 4146,
+        "val": 1
+    },
+    {
+        "desc": "Bus phase rotation wrong",
+        "id": 4147,
+        "val": 1
+    },
+    {
+        "desc": "Priority selection error",
+        "id": 4148,
+        "val": 1
+    },
+    {
+        "desc": "Multiset communications (MSC) data error",
+        "id": 4149,
+        "val": 1
+    },
+    {
+        "desc": "Multiset communications (MSC) ID error",
+        "id": 4150,
+        "val": 1
+    },
+    {
+        "desc": "Multiset communications (MSC) failure",
+        "id": 4151,
+        "val": 1
+    },
+    {
+        "desc": "Multiset communications (MSC) too few sets",
+        "id": 4152,
+        "val": 1
+    },
+    {
+        "desc": "Multiset communications (MSC) alarms inhibited",
+        "id": 4153,
+        "val": 1
+    },
+    {
+        "desc": "Multiset communications (MSC) old version units",
+        "id": 4154,
+        "val": 1
+    },
+    {
+        "desc": "Mains reverse power",
+        "id": 4155,
+        "val": 1
+    },
+    {
+        "desc": "Minimum sets not reached",
+        "id": 4156,
+        "val": 1
+    },
+    {
+        "desc": "Insufficient capacity available",
+        "id": 4157,
+        "val": 1
+    },
+    {
+        "desc": "Expansion input unit not calibrated",
+        "id": 4158,
+        "val": 1
+    },
+    {
+        "desc": "Expansion input unit failure",
+        "id": 4159,
+        "val": 1
+    },
+    {
+        "desc": "Auxiliary sender 1 low",
+        "id": 4160,
+        "val": 1
+    },
+    {
+        "desc": "Auxiliary sender 1 high",
+        "id": 4161,
+        "val": 1
+    },
+    {
+        "desc": "Auxiliary sender 1 fault",
+        "id": 4162,
+        "val": 1
+    },
+    {
+        "desc": "Auxiliary sender 2 low",
+        "id": 4163,
+        "val": 1
+    },
+    {
+        "desc": "Auxiliary sender 2 high",
+        "id": 4164,
+        "val": 1
+    },
+    {
+        "desc": "Auxiliary sender 2 fault",
+        "id": 4165,
+        "val": 1
+    },
+    {
+        "desc": "Auxiliary sender 3 low",
+        "id": 4166,
+        "val": 1
+    },
+    {
+        "desc": "Auxiliary sender 3 high",
+        "id": 4167,
+        "val": 1
+    },
+    {
+        "desc": "Auxiliary sender 3 fault",
+        "id": 4168,
+        "val": 1
+    },
+    {
+        "desc": "Auxiliary sender 4 low",
+        "id": 4169,
+        "val": 1
+    },
+    {
+        "desc": "Auxiliary sender 4 high",
+        "id": 4170,
+        "val": 1
+    },
+    {
+        "desc": "Auxiliary sender 4 fault",
+        "id": 4171,
+        "val": 1
+    },
+    {
+        "desc": "Engine control unit (ECU) link lost",
+        "id": 4172,
+        "val": 1
+    },
+    {
+        "desc": "Engine control unit (ECU) failure",
+        "id": 4173,
+        "val": 1
+    },
+    {
+        "desc": "Engine control unit (ECU) error",
+        "id": 4174,
+        "val": 1
+    },
+    {
+        "desc": "Low coolant temperature",
+        "id": 4175,
+        "val": 1
+    },
+    {
+        "desc": "Out of sync",
+        "id": 4176,
+        "val": 1
+    },
+    {
+        "desc": "Low Oil Pressure Switch",
+        "id": 4177,
+        "val": 1
+    },
+    {
+        "desc": "Alternative Auxiliary Mains Fail",
+        "id": 4178,
+        "val": 1
+    },
+    {
+        "desc": "Loss of excitation",
+        "id": 4179,
+        "val": 1
+    },
+    {
+        "desc": "Mains kW Limit",
+        "id": 4180,
+        "val": 1
+    },
+    {
+        "desc": "Negative phase sequence",
+        "id": 4181,
+        "val": 1
+    },
+    {
+        "desc": "Mains ROCOF",
+        "id": 4182,
+        "val": 1
+    },
+    {
+        "desc": "Mains vector shift",
+        "id": 4183,
+        "val": 1
+    },
+    {
+        "desc": "Mains G59 low frequency",
+        "id": 4184,
+        "val": 1
+    },
+    {
+        "desc": "Mains G59 high frequency",
+        "id": 4185,
+        "val": 1
+    },
+    {
+        "desc": "Mains G59 low voltage",
+        "id": 4186,
+        "val": 1
+    },
+    {
+        "desc": "Mains G59 high voltage",
+        "id": 4187,
+        "val": 1
+    },
+    {
+        "desc": "Mains G59 trip",
+        "id": 4188,
+        "val": 1
+    },
+    {
+        "desc": "Generator kW Overload",
+        "id": 4189,
+        "val": 1
+    },
+    {
+        "desc": "Engine Inlet Temperature high",
+        "id": 4190,
+        "val": 1
+    },
+    {
+        "desc": "Bus 1 live",
+        "id": 4191,
+        "val": 1
+    },
+    {
+        "desc": "Bus 1 phase rotation wrong",
+        "id": 4192,
+        "val": 1
+    },
+    {
+        "desc": "Bus 2 live",
+        "id": 4193,
+        "val": 1
+    },
+    {
+        "desc": "Bus 2 phase rotation wrong",
+        "id": 4194,
+        "val": 1
+    }
+]
