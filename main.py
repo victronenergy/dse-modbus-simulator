@@ -181,18 +181,19 @@ class DSESimulator:
         'Unimplemented alarm',
     ]
 
-    def __init__(self, host: str, port: int, registers: dict, alarms: dict):
+    def __init__(self, host: str, port: int, registers: dict, alarms: dict, no_block=False):
 
         data_handler = DSEDataHandler(
             self.scf_keys, 
-            self._scf_commmand_handler
+            self._scf_command_handler
         )
 
         # Start modbus server
         self.server = ModbusServer(
             host=host,
             port=port,
-            data_hdl=data_handler
+            data_hdl=data_handler,
+            no_block=no_block
         )
 
         # Set basic config
@@ -254,7 +255,7 @@ class DSESimulator:
             logging.info(f"Setting { path } to { val_str }" + ( f" { x['unit'] }" if x['unit'] else '') )
             self._set(**x)
 
-    def _scf_commmand_handler(self, key):
+    def _scf_command_handler(self, key):
         logging.info(f"SCF COMMAND RECEIVED: { key }")
 
         if key == 'TELEMETRY_START':
@@ -323,9 +324,8 @@ if __name__ == '__main__':
     
     simulator.set_register('/AutoStart', 1)
 
-    simulator.set_alarm(4096, DSEAlarmVals.SHUTDOWN)            # Emergency stop
-    simulator.set_alarm(4097, DSEAlarmVals.WARNING)             # Low oil pressure
-    simulator.set_alarm(4117, DSEAlarmVals.ELECTRICAL_TRIP)     # Magnetic pickup fault
+    # simulator.set_alarm(4096, DSEAlarmVals.SHUTDOWN)            # Emergency stop
+    # simulator.set_alarm(4121, DSEAlarmVals.WARNING)             # High battery voltage
+    # simulator.set_alarm(4117, DSEAlarmVals.ELECTRICAL_TRIP)     # Magnetic pickup fault
 
     simulator.start()
-
