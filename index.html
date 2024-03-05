@@ -33,7 +33,7 @@
             this.ws = new WebSocket('ws://localhost:8000/ws');
             this.ws.onmessage = (e) => this.recv(e);
             
-            setTimeout(() => {
+            setInterval(() => {
                 this.sendCommand('send_registers');
                 this.sendCommand('send_alarms');
             }, 1000);
@@ -41,7 +41,7 @@
 
         recv(event) {
             let d = JSON.parse(event.data)
-            console.log('WS message received:', d)
+            // console.log('WS message received:', d)
 
             if (d.hasOwnProperty('registers')) {
                 this.registers = d.registers;
@@ -78,7 +78,8 @@
             this.ws.send(JSON.stringify({
                 'msg': cmd
             }));
-        }
+        },
+
     }">
         <h1>DSE Simulator</h1>
 
@@ -90,7 +91,7 @@
                 <li style="display: flex; flex-direction: row; justify-content: space-between; border-bottom: solid 0.5px black; padding-top: 4px; max-width: 600px;">
                     <span x-text="item.path" style="display: block;"></span>
                     <div style="display: flex; flex-direction: row;">
-                        <input type="number" :value="item.val" style="text-align: right; border: solid 0.5px grey;">
+                        <input type="number" :value="Number(item.val).toFixed(Math.trunc(item.scale/10))" style="text-align: right; border: solid 0.5px grey;">
                         <span x-text="item.unit" style="padding-left: 4px; width: 40px;"></span>
                         <button @click="registerValueChanged(item)">Set</button>
                     </div>

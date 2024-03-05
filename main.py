@@ -43,7 +43,7 @@ async def websocket_endpoint(websocket: WebSocket):
         if 'msg' not in data:
             continue
         
-        logging.info(data['msg'])
+        # logging.info(data['msg'])
         
         if data['msg'] in ['send_registers', 'set_register']:
             if data['msg'] == 'set_register':
