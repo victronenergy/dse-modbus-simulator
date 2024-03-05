@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>DSE Simulator</title>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    </head>
+    <body x-data="{
+        
+        ws: null,
+        registers: [],
+        alarms: [],
+
+        alarmVals: [
+            'Disabled digital input',
+            'Not active alarm',
+            'Warning alarm',
+            'Shutdown alarm',
+            'Electrical trip alarm',
+            'Reserved',
+            'Reserved',
+            'Reserved',
+            'Inactive indication (no string)',
+            'Inactive indication (displayed string)',
+            'Active indication',
+            'Reserved',
+            'Reserved',
+            'Reserved',
+            'Reserved',
+            'Unimplemented alarm',
+        ],
+
+        init() {
+            this.ws = new WebSocket('ws://localhost:8000/ws');
+            this.ws.onmessage = (e) => this.recv(e);
+            
+            setTimeout(() => {
+                this.sendCommand('send_registers');
+                this.sendCommand('send_alarms');
+            }, 1000);
+        },
+
+        recv(event) {
+            let d = JSON.parse(event.data)
+            console.log('WS message received:', d)
+
+            if (d.hasOwnProperty('registers')) {
+                this.registers = d.registers;
+            }
+
+            if (d.hasOwnProperty('alarms')) {
+                this.alarms = d.alarms;
+            }
+        },
+
+        registerValueChanged(item) {
+            let newVal = +this.$el.parentNode.querySelector('input').value;
+            console.log(item.path, 'changed val to', newVal);
+
+            this.ws.send(JSON.stringify({
+                'msg': 'set_register',
+                'path': item.path,
+                'val': newVal
+            }));
+        },
+
+        alarmChanged(item) {
+            let newVal = +this.$el.value;
+            console.log(item.desc, 'changed val to', newVal);
+
+            this.ws.send(JSON.stringify({
+                'msg': 'set_alarm',
+                'id': item.id,
+                'val': newVal
+            }));
+        },
+
+        sendCommand(cmd) {
+            this.ws.send(JSON.stringify({
+                'msg': cmd
+            }));
+        }
+    }">
+        <h1>DSE Simulator</h1>
+
+        <hr>
+
+        <h2>Registers</h2>
+        <ul>
+            <template x-for="item in registers" :key="item.path">
+                <li style="display: flex; flex-direction: row; justify-content: space-between; border-bottom: solid 0.5px black; padding-top: 4px; max-width: 600px;">
+                    <span x-text="item.path" style="display: block;"></span>
+                    <div style="display: flex; flex-direction: row;">
+                        <input type="number" :value="item.val" style="text-align: right; border: solid 0.5px grey;">
+                        <span x-text="item.unit" style="padding-left: 4px; width: 40px;"></span>
+                        <button @click="registerValueChanged(item)">Set</button>
+                    </div>
+                </li>
+            </template>
+        </ul>
+
+        <hr>
+
+        <h2>Alarms</h2>
+        <ul>
+            <template x-for="item in alarms" :key="item.desc">
+                <li style="display: flex; flex-direction: row; justify-content: space-between; border-bottom: solid 0.5px black; padding-top: 4px; max-width: 600px;">
+                    <span x-text="item.desc" style="display: block;"></span>
+                    <select :name="item.desc" @change="alarmChanged(item)">
+                        <template x-for="(val, idx) in alarmVals" :key="idx">
+                            <option :value="idx" x-text="val" :selected="idx == item.val" :disabled="val == 'Reserved'"></option>
+                        </template>
+                    </select>
+                </li>
+            </template>
+        </ul>
+
+    </body>
+</html>

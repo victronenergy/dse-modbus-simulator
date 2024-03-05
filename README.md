@@ -4,10 +4,14 @@ This repository contains a Python script simulating a generator controlled by a 
 
 ## Features
 
+**Modbus:**
 * Telemetry Start/Stop
 * Setting into Auto-Mode
 * Power production value simulation (randomized)
 * Alerts
+
+**Webserver:**
+* Set registers and alarms via web interface
 
 ## Start
 
@@ -24,7 +28,6 @@ source venv/bin/activate
 # Install dependencies
 pip install -r requirements.txt
 
-# Run
-python3 main.py -d
-
+# Run Webserver at http://localhost:8000 and Modbus server on 0.0.0.0:502
+uvicorn main:app
 ```
