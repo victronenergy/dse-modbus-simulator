@@ -61,6 +61,8 @@
                 'path': item.path,
                 'val': newVal
             }));
+
+            this.$el.parentNode.querySelector('input').value = null;
         },
 
         alarmChanged(item) {
@@ -90,9 +92,12 @@
             <template x-for="item in registers" :key="item.path">
                 <li style="display: flex; flex-direction: row; justify-content: space-between; border-bottom: solid 0.5px black; padding-top: 4px; max-width: 600px;">
                     <span x-text="item.path" style="display: block;"></span>
+                    <span x-text="Number(item.val).toFixed(Math.trunc(item.scale/10))" style="display: block; flex-grow: 1; text-align: right; padding: 0 8px;"></span>
+                    <span x-text="item.unit" style="padding-left: 4px; width: 40px;"></span>
+
+                    <span style="padding: 0 16px;">//</span>
                     <div style="display: flex; flex-direction: row;">
-                        <input type="number" :value="Number(item.val).toFixed(Math.trunc(item.scale/10))" style="text-align: right; border: solid 0.5px grey;">
-                        <span x-text="item.unit" style="padding-left: 4px; width: 40px;"></span>
+                        <input type="number" style="text-align: right; border: solid 0.5px grey; margin-right: 8px;">
                         <button @click="registerValueChanged(item)">Set</button>
                     </div>
                 </li>

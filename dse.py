@@ -302,7 +302,7 @@ if __name__ == '__main__':
 
     # parse args
     parser = argparse.ArgumentParser()
-    parser.add_argument('-H', '--host', type=str, default='0.0.0.0', help='Host (default: localhost)')
+    parser.add_argument('-H', '--host', type=str, default='0.0.0.0', help='Host (default: 0.0.0.0)')
     parser.add_argument('-p', '--port', type=int, default=502, help='TCP port (default: 502)')
     parser.add_argument('-d', '--debug', action='store_true', help='set debug mode')
     args = parser.parse_args()
