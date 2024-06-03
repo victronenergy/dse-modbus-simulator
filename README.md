@@ -11,7 +11,7 @@ This repository contains a Python script simulating a generator controlled by a 
 * Alerts
 
 **Webserver:**
-* Set registers and alarms via web interface
+* Read and set register values and alarms via web interface
 
 ## Start
 
