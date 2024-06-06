@@ -7,8 +7,10 @@
     <body x-data="{
         
         ws: null,
+        scheduler: null,
         registers: [],
         alarms: [],
+        interval: null,
 
         alarmVals: [
             'Disabled digital input',
@@ -30,10 +32,21 @@
         ],
 
         init() {
+            this.connect();
+        },
+
+        connect() {
             this.ws = new WebSocket('ws://localhost:8000/ws');
+
             this.ws.onmessage = (e) => this.recv(e);
-            
-            setInterval(() => {
+            this.ws.onclose = (e) => {
+                console.log('Socket closed, reconnecting in 1s.', e.reason);
+                clearInterval(this.scheduler);
+                setTimeout(() => this.connect(), 1000);
+            };
+            this.ws.onerror = (e) => this.ws.close();
+
+            this.scheduler = setInterval(() => {
                 this.sendCommand('send_registers');
                 this.sendCommand('send_alarms');
             }, 1000);
