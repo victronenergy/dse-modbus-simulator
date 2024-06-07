@@ -100,38 +100,46 @@
 
         <hr>
 
-        <h2>Registers</h2>
-        <ul>
-            <template x-for="item in registers" :key="item.path">
-                <li style="display: flex; flex-direction: row; justify-content: space-between; border-bottom: solid 0.5px black; padding-top: 4px; max-width: 600px;">
-                    <span x-text="item.path" style="display: block;"></span>
-                    <span x-text="Number(item.val).toFixed(Math.trunc(item.scale/10))" style="display: block; flex-grow: 1; text-align: right; padding: 0 8px;"></span>
-                    <span x-text="item.unit" style="padding-left: 4px; width: 40px;"></span>
+        <div style="display: flex; flex-wrap: wrap;	gap: 1rem;">
 
-                    <span style="padding: 0 16px;">//</span>
-                    <div style="display: flex; flex-direction: row;">
-                        <input type="number" style="text-align: right; border: solid 0.5px grey; margin-right: 8px;">
-                        <button @click="registerValueChanged(item)">Set</button>
-                    </div>
-                </li>
-            </template>
-        </ul>
+            <div>
+                <h2>Registers</h2>
+                <ul>
+                    <template x-for="item in registers" :key="item.path">
+                        <li style="display: flex; flex-direction: row; justify-content: space-between; border-bottom: solid 0.5px black; padding-top: 4px; max-width: 600px;">
+                            <span x-text="item.path" style="display: block;"></span>
+                            <span x-text="Number(item.val).toFixed(Math.trunc(item.scale/10))" style="display: block; flex-grow: 1; text-align: right; padding: 0 8px;"></span>
+                            <span x-text="item.unit" style="padding-left: 4px; width: 40px;"></span>
 
-        <hr>
+                            <span style="padding: 0 16px;">//</span>
+                            <div style="display: flex; flex-direction: row;">
+                                <input type="number" style="text-align: right; border: solid 0.5px grey; margin-right: 8px;">
+                                <button @click="registerValueChanged(item)">Set</button>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+                <hr>
+            </div>
 
-        <h2>Alarms</h2>
-        <ul>
-            <template x-for="item in alarms" :key="item.desc">
-                <li style="display: flex; flex-direction: row; justify-content: space-between; border-bottom: solid 0.5px black; padding-top: 4px; max-width: 600px;">
-                    <span x-text="item.desc" style="display: block;"></span>
-                    <select :name="item.desc" @change="alarmChanged(item)">
-                        <template x-for="(val, idx) in alarmVals" :key="idx">
-                            <option :value="idx" x-text="val" :selected="idx == item.val" :disabled="val == 'Reserved'"></option>
-                        </template>
-                    </select>
-                </li>
-            </template>
-        </ul>
+            <div>
+                <h2>Alarms</h2>
+                <ul>
+                    <template x-for="item in alarms" :key="item.desc">
+                        <li style="display: flex; flex-direction: row; justify-content: space-between; border-bottom: solid 0.5px black; padding-top: 4px; max-width: 600px;">
+                            <span x-text="item.desc" style="display: block;"></span>
+                            <select :name="item.desc" @change="alarmChanged(item)">
+                                <template x-for="(val, idx) in alarmVals" :key="idx">
+                                    <option :value="idx" x-text="val" :selected="idx == item.val" :disabled="val == 'Reserved'"></option>
+                                </template>
+                            </select>
+                        </li>
+                    </template>
+                </ul>
+                <hr>
+            </div>
+
+        </div>
 
     </body>
 </html>
