@@ -34,7 +34,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # Run Webserver at http://localhost:8000 and Modbus server on 0.0.0.0:502
-uvicorn main:app
+python3 main.py
 ```
 
 After that, you can enter your machine's IP address on the GX device at *Settings* > *Modbus TCP/UDP devices* > *Saved Devices* via the **Add** button. Use `TCP`, port `502` and unit id `1`. After that, the simulated generator should show up in the Device list.

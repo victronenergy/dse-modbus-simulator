@@ -8,7 +8,7 @@ fastapi==0.110.0
 h11==0.14.0
 httpcore==1.0.4
 httptools==0.6.1
-httpx==0.27.0xit
+httpx==0.27.0
 idna==3.6
 itsdangerous==2.1.2
 Jinja2==3.1.3

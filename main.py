@@ -1,34 +1,18 @@
-import json
-import logging
+#! /usr/bin/python3 -u
 
+import os
+import json
+import argparse
+
+import uvicorn
 from fastapi import FastAPI, WebSocket
 from starlette.responses import FileResponse 
 
 from dse import DSESimulator
 
 
-# Load default registers
-with open('dse_registers.json', 'r') as f:
-    registers = json.load(f)
-
-# Load default alarms
-with open('dse_alarms.json', 'r') as f:
-    alarms = json.load(f)
-
-simulator = DSESimulator(
-    host='0.0.0.0', 
-    port=502, 
-    registers=registers, 
-    alarms=alarms,
-    no_block=True
-)
-
-simulator.set_register('/AutoStart', 1)
-simulator.start()
-
-
-
 app = FastAPI()
+simulator = DSESimulator()
 
 @app.get("/")
 async def read_index():
@@ -42,9 +26,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
         if 'msg' not in data:
             continue
-        
-        # logging.info(data['msg'])
-        
+
         if data['msg'] in ['send_registers', 'set_register']:
             if data['msg'] == 'set_register':
                 simulator.set_register(data['path'], float(data['val']))
@@ -67,3 +49,22 @@ async def websocket_endpoint(websocket: WebSocket):
             await websocket.send_text(json.dumps({ 
                 'msg': 'unknown command'
             }))
+
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-d',  '--app-dir',     type=str, default=os.getcwd())
+    parser.add_argument('-wh', '--web-host',    type=str, default='localhost')
+    parser.add_argument('-wp', '--web-port',    type=int, default=8000)
+    parser.add_argument('-mh', '--modbus-host', type=str, default='0.0.0.0')
+    parser.add_argument('-mp', '--modbus-port', type=int, default=502)
+    args = parser.parse_args()
+
+    os.chdir(args.app_dir)
+
+    simulator.prepare(registers='dse_registers.json', alarms='dse_alarms.json')
+    simulator.set_register('/AutoStart', 1)
+    simulator.start(host=args.modbus_host, port=args.modbus_port, no_block=True)
+
+    uvicorn.run(app, host=args.web_host, port=args.web_port)

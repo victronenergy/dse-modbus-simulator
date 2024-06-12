@@ -182,18 +182,43 @@ class DSESimulator:
         'Unimplemented alarm',
     ]
 
-    def __init__(self, host: str, port: int, registers: dict, alarms: dict, no_block=False):
+    server = None
+    registers = None
+    alarms = None
 
-        data_handler = DSEDataHandler(
-            self.scf_keys, 
-            self._scf_command_handler
-        )
+    def prepare(self, registers, alarms):
+        if isinstance(registers, dict):
+            self.registers = registers
+        elif isinstance(registers, str):
+            with open(registers, 'r') as f:
+                self.registers = json.load(f)
+        else:
+            Exception('registers could not be loaded')
+
+        if isinstance(alarms, dict):
+            self.alarms = alarms
+        elif isinstance(alarms, str):
+            with open(alarms, 'r') as f:
+                self.alarms = json.load(f)
+        else:
+            Exception('alarms could not be loaded')
+
+    def start(self, host: str, port: int, no_block=False):
+
+        if not self.registers:
+            Exception('registers not loaded, call prepare() first')
+
+        if not self.alarms:
+            Exception('alarms not loaded, call prepare() first')
 
         # Start modbus server
         self.server = ModbusServer(
             host=host,
             port=port,
-            data_hdl=data_handler,
+            data_hdl=DSEDataHandler(
+                self.scf_keys,
+                self._scf_command_handler
+            ),
             no_block=no_block
         )
 
@@ -211,10 +236,11 @@ class DSESimulator:
             0b1111111111111111,
         ])
 
-        self.registers = registers
-        self.alarms = alarms
+        self.update_regs()
+        self.update_alarms()
 
         self.engine = None
+        self.server.start()
 
     def _set(self, reg: int, val: float, type: str = "u16", scale: int = 1, **kwargs):
 
@@ -271,12 +297,6 @@ class DSESimulator:
         elif key == 'SELECT_AUTO_MODE':
             self.set_register('/AutoStart', 1)
             self.update_regs()
-
-    def start(self):
-        self.update_regs()
-        self.update_alarms()
-
-        self.server.start()
 
     def stop(self):
         self.server.stop()
