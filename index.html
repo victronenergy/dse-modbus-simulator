@@ -2,7 +2,15 @@
 <html>
     <head>
         <title>DSE Simulator</title>
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script defer src="/static/alpine.min.js"></script>
+        <style>
+            .tag {
+                padding: 4px 8px;
+                border-radius: 4px;
+                border-style: solid;
+                font-weight: bold;
+            }
+        </style>
     </head>
     <body x-data="{
         
@@ -30,6 +38,19 @@
             'Reserved',
             'Unimplemented alarm',
         ],
+
+        statusCodes: {
+            0: 'Engine stopped',
+            1: 'Pre-Start',
+            2: 'Warming up',
+            3: 'Running',
+            4: 'Cooling down',
+            5: 'Engine Stopped',
+            6: 'Post run',
+            15: 'Not available'
+        },
+
+
 
         init() {
             this.connect();
@@ -95,12 +116,48 @@
             }));
         },
 
+        sendScf(cmd) {
+            this.ws.send(JSON.stringify({
+                'msg': 'scf',
+                'cmd': cmd
+            }));
+        },
+
+        get statusCode() {
+            let t = this.registers.find(i => i.path == '/StatusCode');
+            return t ? this.statusCodes[t.val] : 'Unknown';
+        },
+
+        get remoteStartMode() {
+            let t = this.registers.find(i => i.path == '/AutoStart');
+            return t ? (t.val == 0 ? 'Disabled' : 'Enabled') : 'Unknown';
+        }
+
     }">
         <h1>DSE Simulator</h1>
 
         <hr>
 
-        <div style="display: flex; flex-wrap: wrap;	gap: 1rem;">
+        <div style="padding-bottom: 16px; display: flex; gap: 2rem;">
+            <div>
+                <h3>Status</h3>
+                <span class="tag" x-text="statusCode"></span>
+            </div>
+            <div>
+                <h3>Remote start mode</h3>
+                <span class="tag" x-text="remoteStartMode"></span>
+            </div>
+            <div>
+                <h3>Actions</h3>
+                <button @click="sendScf('TELEMETRY_START')">Start</button>
+                <button @click="sendScf('TELEMETRY_STOP')">Stop</button>
+                <button @click="sendScf('SELECT_AUTO_MODE')">Enable Remote Start Mode</button>
+            </div>
+        </div>
+
+        <hr>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 2rem;">
 
             <div>
                 <h2>Registers</h2>

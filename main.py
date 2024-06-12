@@ -6,6 +6,7 @@ import argparse
 
 import uvicorn
 from fastapi import FastAPI, WebSocket
+from fastapi.staticfiles import StaticFiles
 from starlette.responses import FileResponse 
 
 from dse import DSESimulator
@@ -13,6 +14,7 @@ from dse import DSESimulator
 
 app = FastAPI()
 simulator = DSESimulator()
+
 
 @app.get("/")
 async def read_index():
@@ -45,6 +47,10 @@ async def websocket_endpoint(websocket: WebSocket):
                 'alarms': simulator.alarms
             }))
 
+        elif data['msg'] == 'scf' \
+                and data.get('cmd', None) in simulator.scf_keys.values():
+            simulator.apply_scf_command(data['cmd'])
+
         else:
             await websocket.send_text(json.dumps({ 
                 'msg': 'unknown command'
@@ -67,4 +73,5 @@ if __name__ == "__main__":
     simulator.set_register('/AutoStart', 1)
     simulator.start(host=args.modbus_host, port=args.modbus_port, no_block=True)
 
+    app.mount("/static", StaticFiles(directory="static"), name="static")
     uvicorn.run(app, host=args.web_host, port=args.web_port)

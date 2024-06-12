@@ -66,7 +66,6 @@ class DSEEngine(Thread):
     def stop(self):
         logging.info("Engine stop")
         self.should_run = False
-        super().join()
 
     def run(self):
         while self.do_run:
@@ -276,6 +275,7 @@ class DSESimulator:
         self.server.data_bank.set_holding_registers(self.alarm_base, alarm_vals)
 
     def update_regs(self):
+
         # Set regs
         for path, x in self.registers.items():
             val_str = "{:.1f}".format(x['val']) if x['val'] is not None else "NaN"
@@ -316,6 +316,9 @@ class DSESimulator:
             if k['id'] == alarm_id:
                 k['val'] = value
                 logging.info(f"Set alarm '{ k['desc'] }' to '{ self.alarm_vals[value] }'")
+
+    def apply_scf_command(self, key):
+        self._scf_command_handler(key)
 
 
 if __name__ == '__main__':
