@@ -5,15 +5,16 @@ import json
 import argparse
 
 import uvicorn
+import asyncio
 from fastapi import FastAPI, WebSocket
 from fastapi.staticfiles import StaticFiles
-from starlette.responses import FileResponse 
+from starlette.responses import FileResponse
 
 from dse import DSESimulator
+from relay_watcher import DbusRelayWatcher
 
 
 app = FastAPI()
-simulator = DSESimulator()
 
 
 @app.get("/")
@@ -23,6 +24,8 @@ async def read_index():
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
+
+    simulator: DSESimulator = websocket.app.state.simulator
     while True:
         data = await websocket.receive_json()
 
@@ -47,8 +50,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 'alarms': simulator.alarms
             }))
 
-        elif data['msg'] == 'scf' \
-                and data.get('cmd', None) in simulator.scf_keys.values():
+        elif data['msg'] == 'scf':
             simulator.apply_scf_command(data['cmd'])
 
         else:
@@ -60,18 +62,35 @@ async def websocket_endpoint(websocket: WebSocket):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-d',  '--app-dir',     type=str, default=os.getcwd())
-    parser.add_argument('-wh', '--web-host',    type=str, default='localhost')
-    parser.add_argument('-wp', '--web-port',    type=int, default=8000)
-    parser.add_argument('-mh', '--modbus-host', type=str, default='0.0.0.0')
-    parser.add_argument('-mp', '--modbus-port', type=int, default=502)
+    parser.add_argument('-d',  '--app-dir',      type=str,  default=os.getcwd())
+    parser.add_argument('-wh', '--web-host',     type=str,  default='localhost')
+    parser.add_argument('-wp', '--web-port',     type=int,  default=8000)
+    parser.add_argument('-mh', '--modbus-host',  type=str,  default='0.0.0.0')
+    parser.add_argument('-mp', '--modbus-port',  type=int,  default=502)
+    parser.add_argument('-hr', '--helper-relay', default=False, action='store_true')
     args = parser.parse_args()
 
     os.chdir(args.app_dir)
+
+    simulator = DSESimulator(
+        telemetry_start_stop=not args.helper_relay
+    )
 
     simulator.prepare(registers='dse_registers.json', alarms='dse_alarms.json')
     simulator.set_register('/AutoStart', 1)
     simulator.start(host=args.modbus_host, port=args.modbus_port, no_block=True)
 
+    app.state.simulator = simulator
     app.mount("/static", StaticFiles(directory="static"), name="static")
-    uvicorn.run(app, host=args.web_host, port=args.web_port)
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
+    config = uvicorn.Config(app, host=args.web_host, port=args.web_port, loop=loop)
+    server = uvicorn.Server(config)
+
+    if args.helper_relay:
+        watcher = DbusRelayWatcher(simulator)
+        loop.create_task(watcher.run())
+
+    loop.run_until_complete(server.serve())

@@ -185,6 +185,14 @@ class DSESimulator:
     registers = None
     alarms = None
 
+    def __init__(self, model_id=4623, telemetry_start_stop=True):
+        self._model_id = model_id  # Default: DSE 4620
+        self.telemetry_start_stop = telemetry_start_stop
+        if not telemetry_start_stop:
+            self.scf_keys = {
+                35701: 'SELECT_AUTO_MODE',
+            }
+
     def prepare(self, registers, alarms):
         if isinstance(registers, dict):
             self.registers = registers
@@ -222,24 +230,45 @@ class DSESimulator:
         )
 
         # Set basic config
-        self.server.data_bank.set_holding_registers(770, [1, 1])     # serial number
-        self.server.data_bank.set_holding_registers(768, [1, 4623])  # DSE 4620
-        self.server.data_bank.set_holding_registers(4096, [          # GenComm System Control Function capabilities
-            0b1111111111111111,
-            0b1111111111111111,
-            0b1111111111111111,
-            0b1111111111111111,
-            0b1111111111111111,
-            0b1111111111111111,
-            0b1111111111111111,
-            0b1111111111111111,
-        ])
+        self.server.data_bank.set_holding_registers(770, [1, 2 if self.telemetry_start_stop else 1]) # serial number
+        self.server.data_bank.set_holding_registers(768, [1, self._model_id])
+        scf_capabilities = self._get_capabilities()
+        self.server.data_bank.set_holding_registers(4096, scf_capabilities)
 
         self.update_regs()
         self.update_alarms()
 
         self.engine = None
         self.server.start()
+
+    def _get_capabilities(self):
+        """
+        Defines the system control key binary flags, indicating
+        if a certain control function is supported by this controller,
+        based on the actually defined keys in self.scf_keys
+        """
+
+        offset = 35700  # base scf id
+        caps = [0] * 16 * 8  # 8 registers a 16 bit, all off by default
+        bitmaps = []
+
+        i = 0
+        for j in range(8):
+            start = j*16
+
+            for k in reversed(range(16)):
+                scf = offset+i
+                if scf in self.scf_keys:
+                    caps[start+k] = True
+                    logging.info(f"Capability { self.scf_keys[scf] } ({ scf }) supported")        
+                i += 1
+
+            chunk = caps[start:start+16]
+            bitmaps.append(
+                sum([b << l for l, b in enumerate(chunk)])
+            )
+
+        return bitmaps
 
     def _set(self, reg: int, val: float, type: str = "u16", scale: int = 1, **kwargs):
 
@@ -282,8 +311,14 @@ class DSESimulator:
             logging.info(f"Setting { path } to { val_str }" + ( f" { x['unit'] }" if x['unit'] else '') )
             self._set(**x)
 
-    def _scf_command_handler(self, key):
-        logging.info(f"SCF COMMAND RECEIVED: { key }")
+    def _scf_command_handler(self, key, from_modbus=True):
+
+        # Ignore, if capability is not set
+        if from_modbus and key not in self.scf_keys.values():
+            logging.info(f"SCF COMMAND RECEIVED: { key }, BUT IGNORING")
+            return
+        else:
+            logging.info(f"SCF COMMAND RECEIVED: { key }")
 
         if key == 'TELEMETRY_START':
             if self.engine is None or not self.engine.is_alive():
@@ -318,7 +353,7 @@ class DSESimulator:
                 logging.info(f"Set alarm '{ k['desc'] }' to '{ self.alarm_vals[value] }'")
 
     def apply_scf_command(self, key):
-        self._scf_command_handler(key)
+        self._scf_command_handler(key, from_modbus=False)
 
 
 if __name__ == '__main__':

@@ -38,3 +38,7 @@ python3 main.py
 ```
 
 After that, you can enter your machine's IP address on the GX device at *Settings* > *Modbus TCP/UDP devices* > *Saved Devices* via the **Add** button. Use `TCP`, port `502` and unit id `1`. After that, the simulated generator should show up in the Device list.
+
+### Helper relay mode
+
+Some DSE controllers, esp. the DSE 4520 MKII model, do not support starting and stopping via Modbus. This can also be simulated using `-hr` flag, by which the controller does not advertise the capability of being remotely started or stopped via Modbus. If the `dbus` Python dependency is available, it will watch for the value of the `/Relay/0/State` path of `com.victronenergy.system` and trigger a start or stop of the simulated genset based on its value change, simultating the physical controller start/stop IO input to be wired to Relay 1 of a GX device.
